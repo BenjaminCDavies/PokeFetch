@@ -5,7 +5,7 @@ description = "FastAPI project to fetch Pokemon"
 authors = [
     { name = "Benjamin Davies", email = "benjamin@the-davies.net" }
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 dependencies = [
     "fastapi[standard]>=0.143.0",
 ]
@@ -19,6 +19,8 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "httpx2>=2.13.1",
+    "pytest>=9.1.1",
     "ruff>=0.17.0",
 ]
 
