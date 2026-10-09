@@ -17,5 +17,16 @@ pokefetch = "pokefetch:main"
 requires = ["uv_build>=0.13.0,<0.14.0"]
 build-backend = "uv_build"
 
+[dependency-groups]
+dev = [
+    "ruff>=0.17.0",
+]
+
 [tool.fastapi]
 entrypoint = "pokefetch.main:app"
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
