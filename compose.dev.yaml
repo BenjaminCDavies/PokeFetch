@@ -1,0 +1,11 @@
+services:
+  pokefetch:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pokefetch-dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/pokefetch/src
+    command: ["fastapi", "dev", "src/pokefetch/main.py", "--host", "0.0.0.0", "--port", "8000"]
