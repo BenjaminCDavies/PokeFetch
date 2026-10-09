@@ -1,30 +1,26 @@
-
 FROM python:3.13-slim
 
-# Install uv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.13.0 /uv /bin/uv
 
 WORKDIR /pokefetch
 
-# Configure uv for container-friendly dependency installation
-ENV UV_COMPILE_BYTECODE=1
-ENV UV_LINK_MODE=copy
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    UV_PYTHON_DOWNLOADS=0 \
+    PATH="/pokefetch/.venv/bin:$PATH"
 
-# Copy dependency metadata first for better build caching
-COPY pyproject.toml uv.lock ./
+# Dependencies layer: only rebuilds when pyproject.toml or uv.lock change
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    uv sync --frozen --no-install-project --no-dev
 
-# Install dependencies without installing the project itself yet
-RUN uv sync --frozen --no-install-project
-
-# Copy application source
 COPY src ./src
 
-# Install the project
-RUN uv sync --frozen
+# Install the project itself
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    uv sync --frozen --no-dev
 
-# Make the virtual environment available on PATH
-ENV PATH="/pokefetch/.venv/bin:$PATH"
-
-EXPOSE 8000
-
-CMD ["fastapi", "run", "src/pokefetch/main.py", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["fastapi", "run", "src/pokefetch/main.py"]
