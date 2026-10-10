@@ -1,5 +1,6 @@
 services:
-  pokefetch:
+  api:
+    image: pokefetch-api:dev
     restart: "no"
     volumes:
       - ./src:/pokefetch/src
