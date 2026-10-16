@@ -1,15 +1,13 @@
 from fastapi import FastAPI
 
-from pokefetch.database import test_database_connection
+from pokefetch.routes.pokemon import router as pokemon_router
 
-app = FastAPI()
+app: FastAPI = FastAPI(title="PokeFetch API")
 
 
 @app.get("/health", tags=["Health"])
-async def health():
+async def health() -> dict[str, str]:
     return {"status": "PokeFetch healthy"}
 
 
-@app.get("/db")
-def db():
-    return {"database": test_database_connection()}
+app.include_router(pokemon_router)
