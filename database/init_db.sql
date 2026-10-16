@@ -1,7 +1,3 @@
--- Pokefetch starter database
--- Intended for a fresh development database.
--- Rarity and strength are Pokefetch game-design values, not official Pokémon stats.
-
 BEGIN;
 
 CREATE TABLE IF NOT EXISTS pokemon (
@@ -40,10 +36,6 @@ CREATE INDEX IF NOT EXISTS idx_pokemon_rarity ON pokemon (rarity);
 CREATE INDEX IF NOT EXISTS idx_pokemon_type_1 ON pokemon (type_1);
 CREATE INDEX IF NOT EXISTS idx_pokemon_strength ON pokemon (strength);
 
--- Seed the first 50 National Pokédex entries.
--- Strength, rarity, and the short descriptions are tailored for Pokefetch.
--- Battle stats, heights, and weights are based on the species' commonly listed
--- base data; abilities are representative examples, not an exhaustive list.
 INSERT INTO pokemon (
     pokedex_number, name, type_1, type_2, rarity, strength,
     hp, attack, defense, special_attack, special_defense, speed,
